@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>YTPPlusDeluxe</RootNamespace>
+    <AssemblyName>YTPPlusDeluxe</AssemblyName>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="ytpplus\\Main.cs" />
+    <Compile Include="ytpplus\\Main.Designer.cs" />
+    <Compile Include="ytpplus\\EffectsFactory.cs" />
+    <Compile Include="ytpplus\\ProjectModel.cs" />
+    <Compile Include="ytpplus\\Utilities.cs" />
+    <Compile Include="ytpplus\\YTPGenerator.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+</Project>
