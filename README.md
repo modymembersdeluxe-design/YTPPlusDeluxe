@@ -1,7 +1,15 @@
 # YTP+ Deluxe Edition (Windows Forms)
 
 ## Overview
-YTP+ Deluxe Edition is a Windows 7/8.1-friendly YouTube Poop (YTP) effects editor built with C# Windows Forms for Visual Studio 2022. It assembles clips, applies randomized audio/video effects, and renders results via external tools (FFmpeg/FFprobe/ImageMagick). This repository provides the project structure, core generator scaffolding, and UI wiring needed to evolve the editor into a full production build that supports YTP, YTP Tennis, Collab entries, and YTPMV workflows.
+YTP+ Deluxe Edition is a YouTube Poop (YTP) effects editor built with C# Windows Forms for Visual Studio 2022. It assembles clips, applies randomized audio/video effects, and renders results via external tools (FFmpeg/FFprobe/ImageMagick). This repository provides the project structure, core generator scaffolding, and UI wiring needed to evolve the editor into a full production build that supports YTP, YTP Tennis, Collab entries, and YTPMV workflows.
+
+### Windows support targets
+This scaffolding is intended to remain compatible with a broad range of Windows releases:
+- Windows XP, Longhorn, Vista (beta/RTM)
+- Windows 7 (beta/RTM), Windows 8 (beta/RTM), Windows 8.1
+- Windows 10 (beta/RTM) and Windows 11
+
+Actual compatibility depends on the .NET Framework runtime, FFmpeg build, and any third-party libraries you integrate.
 
 ### Deluxe GUI highlights
 - Source browsers for local video/audio/images/GIFs/transition clips.
