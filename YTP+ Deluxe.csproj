@@ -7,10 +7,11 @@
     <AssemblyName>YTPPlusDeluxe</AssemblyName>
     <AssemblyTitle>YTP+ Deluxe Edition</AssemblyTitle>
     <Description>YTP+ Deluxe Edition WinForms scaffolding targeting Windows XP through Windows 11 (compatibility depends on .NET Framework and toolchain).</Description>
+    <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
+	
+	<ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="ytpplus\\Main.cs" />
     <Compile Include="ytpplus\\Main.Designer.cs" />

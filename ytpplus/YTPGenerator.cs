@@ -36,13 +36,13 @@ namespace YTPPlusDeluxe
 
     internal sealed class YTPGenerator
     {
-        private readonly List<string> sources = new();
-        private readonly List<string> audioSources = new();
-        private readonly List<string> imageSources = new();
-        private readonly List<string> gifSources = new();
-        private readonly List<string> transitionSources = new();
-        private readonly List<string> urlSources = new();
-        private readonly Random random = new();
+        private readonly List<string> sources = new List<string>();
+        private readonly List<string> audioSources = new List<string>();
+        private readonly List<string> imageSources = new List<string>();
+        private readonly List<string> gifSources = new List<string>();
+        private readonly List<string> transitionSources = new List<string>();
+        private readonly List<string> urlSources = new List<string>();
+        private readonly Random random = new Random();
 
         public YTPGenerator(string outputPath)
         {
@@ -51,7 +51,7 @@ namespace YTPPlusDeluxe
         }
 
         public string OutputPath { get; }
-        public ToolBox toolBox { get; } = new();
+        public ToolBox toolBox { get; } = new ToolBox();
         public bool insertTransitionClips { get; set; } = true;
         public int width { get; set; } = 640;
         public int height { get; set; } = 480;
@@ -59,7 +59,7 @@ namespace YTPPlusDeluxe
         public bool outro { get; set; }
         public bool pluginTest { get; set; }
         public int pluginCount { get; set; }
-        public List<string> plugins { get; set; } = new();
+        public List<string> plugins { get; set; } = new List<string>();
         public IReadOnlyDictionary<EffectType, EffectDefinition> Effects { get; }
         public EffectFlags EnabledEffects { get; set; } = EffectFlags.RandomSound | EffectFlags.Reverse;
         public string OutputFormat { get; set; } = "mp4";
@@ -166,7 +166,7 @@ namespace YTPPlusDeluxe
                 WorkerReportsProgress = true
             };
 
-            worker.DoWork += (_, _) =>
+            worker.DoWork += (sender, e) =>
             {
                 try
                 {

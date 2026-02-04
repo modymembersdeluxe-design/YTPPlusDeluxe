@@ -53,7 +53,6 @@ namespace YTPPlusDeluxe
         private Button AddTransition;
         private Button AddUrl;
         private Button Preview;
-        private ComboBox ProjectType;
         private ComboBox OutputFormat;
         private Button Render;
         private Button SaveAs;
@@ -131,7 +130,6 @@ namespace YTPPlusDeluxe
             AddTransition = new Button();
             AddUrl = new Button();
             Preview = new Button();
-            ProjectType = new ComboBox();
             OutputFormat = new ComboBox();
             Render = new Button();
             SaveAs = new Button();
@@ -258,9 +256,9 @@ namespace YTPPlusDeluxe
             UrlSourcesLabel.Text = "URL Sources";
             UrlSourcesLabel.Location = new System.Drawing.Point(360, 460);
 
-            ProjectType.DropDownStyle = ComboBoxStyle.DropDownList;
-            ProjectType.Items.AddRange(new object[] { "Generic", "YTP Tennis", "Collab Entry", "YTPMV" });
-            ProjectType.Location = new System.Drawing.Point(140, 12);
+            projectTypeCombo.DropDownStyle = ComboBoxStyle.DropDownList;
+            projectTypeCombo.Items.AddRange(new object[] { "Generic", "YTP Tennis", "Collab Entry", "YTPMV" });
+            projectTypeCombo.Location = new System.Drawing.Point(140, 12);
 
             OutputFormat.DropDownStyle = ComboBoxStyle.DropDownList;
             OutputFormat.Items.AddRange(new object[] { "mp4", "wmv", "avi", "mkv" });
@@ -331,7 +329,7 @@ namespace YTPPlusDeluxe
             Controls.Add(GifSourcesLabel);
             Controls.Add(TransitionSourcesLabel);
             Controls.Add(UrlSourcesLabel);
-            Controls.Add(ProjectType);
+            Controls.Add(projectTypeCombo);
             Controls.Add(OutputFormat);
             Controls.Add(VideoSources);
             Controls.Add(AudioSources);

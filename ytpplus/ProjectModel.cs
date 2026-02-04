@@ -67,14 +67,14 @@ namespace YTPPlusDeluxe
         public EffectFlags EnabledEffects { get; set; } = EffectFlags.RandomSound | EffectFlags.Reverse;
         public string OutputFormat { get; set; } = "mp4";
 
-        public List<string> VideoSources { get; } = new();
-        public List<string> AudioSources { get; } = new();
-        public List<string> ImageSources { get; } = new();
-        public List<string> GifSources { get; } = new();
-        public List<string> TransitionSources { get; } = new();
-        public List<string> UrlSources { get; } = new();
+        public List<string> VideoSources { get; } = new List<string>();
+        public List<string> AudioSources { get; } = new List<string>();
+        public List<string> ImageSources { get; } = new List<string>();
+        public List<string> GifSources { get; } = new List<string>();
+        public List<string> TransitionSources { get; } = new List<string>();
+        public List<string> UrlSources { get; } = new List<string>();
 
-        public Dictionary<string, string> AssetFolders { get; } = new()
+        public Dictionary<string, string> AssetFolders { get; } = new Dictionary<string, string>
         {
             ["images"] = "images",
             ["memes"] = "memes",
@@ -85,7 +85,7 @@ namespace YTPPlusDeluxe
             ["errors"] = "errors"
         };
 
-        public List<MixerChannel> MixerChannels { get; } = new()
+        public List<MixerChannel> MixerChannels { get; } = new List<MixerChannel>
         {
             new MixerChannel("Master"),
             new MixerChannel("Aux1"),

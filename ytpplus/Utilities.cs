@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -15,7 +14,7 @@ namespace YTPPlusDeluxe
                 return "\"\"";
             }
 
-            return value.Contains(" ", StringComparison.Ordinal)
+            return value.IndexOf(" ", StringComparison.Ordinal) >= 0
                 ? "\"" + value + "\""
                 : value;
         }
@@ -43,17 +42,20 @@ namespace YTPPlusDeluxe
                     RedirectStandardError = true
                 };
 
-                using var process = Process.Start(startInfo);
+                var process = Process.Start(startInfo);
                 if (process == null)
                 {
                     output = "Process could not be started.";
                     return false;
                 }
 
-                output = process.StandardOutput.ReadToEnd();
-                output += process.StandardError.ReadToEnd();
-                process.WaitForExit();
-                return process.ExitCode == 0;
+                using (process)
+                {
+                    output = process.StandardOutput.ReadToEnd();
+                    output += process.StandardError.ReadToEnd();
+                    process.WaitForExit();
+                    return process.ExitCode == 0;
+                }
             }
             catch (Exception ex)
             {
@@ -82,6 +84,8 @@ namespace YTPPlusDeluxe
                     return false;
                 }
 
+                // Dispose the Process instance since caller only needs it started.
+                process.Dispose();
                 return true;
             }
             catch (Exception ex)

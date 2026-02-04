@@ -1,0 +1,40 @@
+<!--
+Pseudocode / Plan (detailed):
+
+1. Problem:
+   - MSBuild/.NET SDK includes `Compile` items implicitly.
+   - When a project also explicitly lists the same `Compile` items, MSBuild raises NETSDK1022 (duplicate Compile items).
+
+2. Objective:
+   - Remove the duplicate-Compile error across the repository without editing each project file.
+   - Ensure all C# source files are still compiled.
+   - Exclude build output folders from being included.
+
+3. Approach:
+   - Add a repository-level MSBuild props file `Directory.Build.props` so it's imported by all projects.
+   - Disable SDK implicit Compile items by setting `EnableDefaultCompileItems` to `false`.
+   - Re-introduce explicit `Compile` inclusion using a recursive wildcard `**\*.cs`.
+   - Exclude `obj` and `bin` directories to avoid including generated files.
+   - Keep the file minimal and well-commented.
+
+4. Implementation:
+   - Create `<PropertyGroup>` with `<EnableDefaultCompileItems>false</EnableDefaultCompileItems>`.
+   - Create `<ItemGroup>` with `<Compile Include="**\*.cs" Exclude="obj\**;bin\**" />`.
+   - This file will be picked up automatically by MSBuild for all projects in the repository root and subfolders.
+
+5. Notes:
+   - For non-SDK-style projects this is safe: the property will have no effect where not applicable.
+   - If any project needs custom includes, adjust that project's .csproj or add a project-specific props file.
+-->
+
+<Project>
+  <PropertyGroup>
+    <!-- Disable SDK implicit Compile items to avoid duplicate 'Compile' items error (NETSDK1022) -->
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Explicitly include all C# source files, excluding build outputs -->
+    <Compile Include="**\*.cs" Exclude="obj\**;bin\**" />
+  </ItemGroup>
+</Project>

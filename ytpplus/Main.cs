@@ -5,14 +5,13 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-using Microsoft.VisualBasic;
 
 namespace YTPPlusDeluxe
 {
     public partial class YTPPlusDeluxe : Form
     {
         private bool renderComplete = true;
-        private readonly ProjectModel projectModel = new();
+        private readonly ProjectModel projectModel = new ProjectModel();
 
         // Tool variables
         private string ffmpeg = "ffmpeg.exe";
@@ -47,9 +46,9 @@ namespace YTPPlusDeluxe
 
         private YTPGenerator? globalGen;
         private int pluginCount;
-        private readonly List<string> enabledPlugins = new();
-        private readonly PresenceClient client = new();
-        private readonly Timestamps timestamps = new();
+        private readonly List<string> enabledPlugins = new List<string>();
+        private readonly PresenceClient client = new PresenceClient();
+        private readonly Timestamps timestamps = new Timestamps();
         private readonly string[] titles =
         {
             "Yo",
@@ -60,11 +59,17 @@ namespace YTPPlusDeluxe
             "WTF Booooooooooom"
         };
 
+        // Change the following field declarations to nullable types to resolve CS8618
+        private ComboBox? projectTypeCombo;
+
+        // Update the property to handle the nullable field
+        public ComboBox? ProjectTypeCombo => projectTypeCombo;
+
         public YTPPlusDeluxe()
         {
             InitializeComponent();
             SetVars();
-            ProjectType.SelectedIndex = 0;
+            ProjectTypeCombo.SelectedIndex = 0;
             OutputFormat.SelectedIndex = 0;
         }
 
@@ -153,19 +158,20 @@ namespace YTPPlusDeluxe
 
         public void addSource()
         {
-            using var dialog = new OpenFileDialog
+            using (var dialog = new OpenFileDialog
             {
                 Multiselect = true,
                 Filter = "Video Files (*.mp4)|*.mp4"
-            };
-
-            if (dialog.ShowDialog() == DialogResult.OK)
+            })
             {
-                foreach (var file in dialog.FileNames)
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    Array.Resize(ref sources, sources.Length + 1);
-                    sources[^1] = file;
-                    Material.Text += file + Environment.NewLine;
+                    foreach (var file in dialog.FileNames)
+                    {
+                        Array.Resize(ref sources, sources.Length + 1);
+                        sources[sources.Length - 1] = file;
+                        Material.Text += file + Environment.NewLine;
+                    }
                 }
             }
         }
@@ -218,22 +224,23 @@ namespace YTPPlusDeluxe
 
         private void AddSourceFromFolder(string description, string[] extensions, ListBox listBox, List<string> storage)
         {
-            using var dialog = new FolderBrowserDialog
+            using (var dialog = new FolderBrowserDialog
             {
                 Description = description
-            };
-
-            if (dialog.ShowDialog() != DialogResult.OK)
+            })
             {
-                return;
-            }
-
-            foreach (var file in Directory.GetFiles(dialog.SelectedPath))
-            {
-                if (Array.Exists(extensions, ext => file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
-                    storage.Add(file);
-                    listBox.Items.Add(file);
+                    return;
+                }
+
+                foreach (var file in Directory.GetFiles(dialog.SelectedPath))
+                {
+                    if (Array.Exists(extensions, ext => file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        storage.Add(file);
+                        listBox.Items.Add(file);
+                    }
                 }
             }
         }
@@ -246,7 +253,7 @@ namespace YTPPlusDeluxe
             return nano;
         }
 
-        public void progress(object? sender, ProgressChangedEventArgs e)
+        public void progress(object sender, ProgressChangedEventArgs e)
         {
             progressBar1.Value = e.ProgressPercentage;
             client.SetPresence(new RichPresence
@@ -262,7 +269,7 @@ namespace YTPPlusDeluxe
             });
         }
 
-        public void complete(object? sender, RunWorkerCompletedEventArgs e)
+        public void complete(object sender, RunWorkerCompletedEventArgs e)
         {
             progressBar1.Value = 100;
             renderComplete = true;
@@ -327,7 +334,7 @@ namespace YTPPlusDeluxe
                 SaveAs.Enabled = false;
                 Render.Enabled = false;
 
-                projectModel.Type = (ProjectType)ProjectType.SelectedIndex;
+                projectModel.Type = (ProjectType)ProjectTypeCombo.SelectedIndex;
                 projectModel.OutputFormat = OutputFormat.SelectedItem?.ToString() ?? "mp4";
                 projectModel.EnabledEffects = CollectEffectFlags();
                 projectModel.VideoSources.Clear();
@@ -420,62 +427,67 @@ namespace YTPPlusDeluxe
 
         private void AddVideo_Click(object sender, EventArgs e)
         {
-            using var dialog = new OpenFileDialog
+            using (var dialog = new OpenFileDialog
             {
                 Multiselect = true,
                 Filter = "Video Files (*.mp4;*.wmv;*.avi;*.mkv)|*.mp4;*.wmv;*.avi;*.mkv"
-            };
-
-            AddSourceToList(dialog, VideoSources, projectModel.VideoSources);
+            })
+            {
+                AddSourceToList(dialog, VideoSources, projectModel.VideoSources);
+            }
         }
 
         private void AddAudio_Click(object sender, EventArgs e)
         {
-            using var dialog = new OpenFileDialog
+            using (var dialog = new OpenFileDialog
             {
                 Multiselect = true,
                 Filter = "Audio Files (*.mp3;*.wav;*.ogg;*.xm;*.mod;*.it)|*.mp3;*.wav;*.ogg;*.xm;*.mod;*.it"
-            };
-
-            AddSourceToList(dialog, AudioSources, projectModel.AudioSources);
+            })
+            {
+                AddSourceToList(dialog, AudioSources, projectModel.AudioSources);
+            }
         }
 
         private void AddImage_Click(object sender, EventArgs e)
         {
-            using var dialog = new OpenFileDialog
+            using (var dialog = new OpenFileDialog
             {
                 Multiselect = true,
                 Filter = "Image Files (*.png;*.jpg;*.webp)|*.png;*.jpg;*.webp"
-            };
-
-            AddSourceToList(dialog, ImageSources, projectModel.ImageSources);
+            })
+            {
+                AddSourceToList(dialog, ImageSources, projectModel.ImageSources);
+            }
         }
 
         private void AddGif_Click(object sender, EventArgs e)
         {
-            using var dialog = new OpenFileDialog
+            using (var dialog = new OpenFileDialog
             {
                 Multiselect = true,
                 Filter = "GIF Files (*.gif)|*.gif"
-            };
-
-            AddSourceToList(dialog, GifSources, projectModel.GifSources);
+            })
+            {
+                AddSourceToList(dialog, GifSources, projectModel.GifSources);
+            }
         }
 
         private void AddTransition_Click(object sender, EventArgs e)
         {
-            using var dialog = new OpenFileDialog
+            using (var dialog = new OpenFileDialog
             {
                 Multiselect = true,
                 Filter = "Transition Videos (*.mp4;*.wmv;*.avi;*.mkv)|*.mp4;*.wmv;*.avi;*.mkv"
-            };
-
-            AddSourceToList(dialog, TransitionSources, projectModel.TransitionSources);
+            })
+            {
+                AddSourceToList(dialog, TransitionSources, projectModel.TransitionSources);
+            }
         }
 
         private void AddUrl_Click(object sender, EventArgs e)
         {
-            var url = Interaction.InputBox("Enter a media URL (YouTube, Facebook, etc.):", "Add URL");
+            var url = InputBox("Enter a media URL (YouTube, Facebook, etc.):", "Add URL");
             if (!string.IsNullOrWhiteSpace(url))
             {
                 projectModel.UrlSources.Add(url);
@@ -501,6 +513,65 @@ namespace YTPPlusDeluxe
             {
                 alert("Preview failed to start: " + error);
             }
+        }
+
+        private static string InputBox(string prompt, string title)
+        {
+            string result = string.Empty;
+            using (var form = new Form())
+            {
+                form.Text = title;
+                form.FormBorderStyle = FormBorderStyle.FixedDialog;
+                form.StartPosition = FormStartPosition.CenterParent;
+                form.MinimizeBox = false;
+                form.MaximizeBox = false;
+                form.ShowInTaskbar = false;
+                form.ClientSize = new System.Drawing.Size(420, 120);
+
+                var label = new Label
+                {
+                    Left = 10,
+                    Top = 10,
+                    Text = prompt,
+                    AutoSize = true
+                };
+                var textBox = new TextBox
+                {
+                    Left = 10,
+                    Top = 30,
+                    Width = 400
+                };
+                var ok = new Button
+                {
+                    Text = "OK",
+                    Left = 240,
+                    Width = 80,
+                    Top = 60,
+                    DialogResult = DialogResult.OK
+                };
+                var cancel = new Button
+                {
+                    Text = "Cancel",
+                    Left = 330,
+                    Width = 80,
+                    Top = 60,
+                    DialogResult = DialogResult.Cancel
+                };
+
+                form.Controls.Add(label);
+                form.Controls.Add(textBox);
+                form.Controls.Add(ok);
+                form.Controls.Add(cancel);
+                form.AcceptButton = ok;
+                form.CancelButton = cancel;
+
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    result = textBox.Text;
+                }
+            }
+
+            return result;
         }
     }
 }
