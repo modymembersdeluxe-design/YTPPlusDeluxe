@@ -70,6 +70,7 @@ namespace YTPPlusDeluxe
         private Label GifSourcesLabel;
         private Label TransitionSourcesLabel;
         private Label UrlSourcesLabel;
+        private ComboBox projectTypeComboBox;
 
         protected override void Dispose(bool disposing)
         {
@@ -147,6 +148,7 @@ namespace YTPPlusDeluxe
             GifSourcesLabel = new Label();
             TransitionSourcesLabel = new Label();
             UrlSourcesLabel = new Label();
+            projectTypeComboBox = new ComboBox();
 
             ((ISupportInitialize)Clips).BeginInit();
             ((ISupportInitialize)WidthSet).BeginInit();
@@ -256,9 +258,10 @@ namespace YTPPlusDeluxe
             UrlSourcesLabel.Text = "URL Sources";
             UrlSourcesLabel.Location = new System.Drawing.Point(360, 460);
 
-            projectTypeCombo.DropDownStyle = ComboBoxStyle.DropDownList;
-            projectTypeCombo.Items.AddRange(new object[] { "Generic", "YTP Tennis", "Collab Entry", "YTPMV" });
-            projectTypeCombo.Location = new System.Drawing.Point(140, 12);
+            projectTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            projectTypeComboBox.Items.AddRange(new object[] { "Generic", "YTP Tennis", "Collab Entry", "YTPMV" });
+            projectTypeComboBox.Location = new System.Drawing.Point(140, 12);
+            projectTypeComboBox.SelectedIndex = 0;
 
             OutputFormat.DropDownStyle = ComboBoxStyle.DropDownList;
             OutputFormat.Items.AddRange(new object[] { "mp4", "wmv", "avi", "mkv" });
@@ -329,7 +332,7 @@ namespace YTPPlusDeluxe
             Controls.Add(GifSourcesLabel);
             Controls.Add(TransitionSourcesLabel);
             Controls.Add(UrlSourcesLabel);
-            Controls.Add(projectTypeCombo);
+            Controls.Add(projectTypeComboBox);
             Controls.Add(OutputFormat);
             Controls.Add(VideoSources);
             Controls.Add(AudioSources);
